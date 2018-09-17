@@ -286,6 +286,16 @@ shuffle_pattern(PG_FUNCTION_ARGS)
 	PG_RETURN_POINTER(patternDataDst);
 }
 
+float round(float var)
+{
+	// 37.66666 * 100 =3766.66
+	// 3766.66 + .5 =37.6716 for rounding off value
+	// then type cast to int so value is 3766
+	// then divided by 100 so the value converted into 37.66
+	float value = (int)(var * 10000 + .5);
+	return (float)value / 10000;
+}
+
 /*
  * Read float4 from string while skipping " ()," symbols.
  */
@@ -327,7 +337,7 @@ read_float(char **s, char *type_name, char *orig_string)
 				 errmsg("invalid input syntax for type %s: \"%s\"",
 						type_name, orig_string)));
 
-	return result;
+	return round(result);
 }
 
 /*
